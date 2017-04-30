@@ -1,0 +1,52 @@
+$ python -m json.tool mp_films.json
+[
+    {
+        "title": "And Now for Something Completely Different",
+        "year": 1971
+    },
+    {
+        "title": "Monty Python and the Holy Grail",
+        "year": 1975
+    }
+]
+###
+$ echo '{"json": "obj"}' | python -m json.tool
+{
+    "json": "obj"
+}
+$ echo '{1.2:3.4}' | python -m json.tool
+Expecting property name enclosed in double quotes: line 1 column 2 (char 1)
+###
+>>> # Neither of these calls raises an exception, but the results are not valid JSON
+>>> json.dumps(float('-inf'))
+'-Infinity'
+>>> json.dumps(float('nan'))
+'NaN'
+>>> # Same when deserializing
+>>> json.loads('-Infinity')
+-inf
+>>> json.loads('NaN')
+nan
+###
+def default(self, o):
+   try:
+       iterable = iter(o)
+   except TypeError:
+       pass
+   else:
+       return list(iterable)
+   # Let the base class default method raise the TypeError
+   return json.JSONEncoder.default(self, o)
+###
+>>> import json
+>>> def as_complex(dct):
+...     if '__complex__' in dct:
+...         return complex(dct['real'], dct['imag'])
+...     return dct
+...
+>>> json.loads('{"__complex__": true, "real": 1, "imag": 2}',
+...     object_hook=as_complex)
+(1+2j)
+>>> import decimal
+>>> json.loads('1.1', parse_float=decimal.Decimal)
+Decimal('1.1')
