@@ -1,7 +1,7 @@
-from instagram.client import InstagramAPI
+from modules.client import InstagramAPI
 
-access_token =  9cfaf61e97e7408082a76bd777133e7f
-client_secret = ab35b87e649e49aaacb8e9397ff24981
+access_token = '9cfaf61e97e7408082a76bd777133e7f'
+client_secret = 'ab35b87e649e49aaacb8e9397ff24981'
 
 media_id = input()
 
